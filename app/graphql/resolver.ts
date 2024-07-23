@@ -6,6 +6,7 @@ export const resolvers = {
         polls: async () => {
           return prisma.poll.findMany()
         },
+        poll: async (_: unknown, { id }: { id: number}) => await prisma.poll.findUnique({ where: { id: Number(id) }, include: { options: true } })
     },
     Poll: {
       options: async (parent: Poll): Promise<PollOption[]> => {
@@ -29,6 +30,22 @@ export const resolvers = {
           include: { options: true }
         })
         return poll
-      },    
+      },
+      votePoll: async (_: unknown, { pollId, optionId }: { pollId: number; optionId: number }) => {
+        await prisma.pollOption.update({
+          where: { id: Number(optionId) },
+          data: { votes: { increment: 1 } },
+        });
+        return prisma.poll.findUnique({ where: { id: Number(pollId) }, include: { options: true } });
+      },
+      deletePoll: async (_: unknown, { id }: { id: number }) => {
+        await prisma.pollOption.deleteMany({
+          where: { pollId: Number(id) },
+        });
+        await prisma.poll.delete({
+          where: { id: Number(id) },
+        });
+        return true;
+      },
     }
 }

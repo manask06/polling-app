@@ -15,10 +15,13 @@ type PollOption {
 
 type Query {
   polls: [Poll!]!
+  poll(id: ID!): Poll
 }
 
 type Mutation {
   createPoll(title: String!, description: String, options: [PollOptionInput!]!): Poll!
+  votePoll(pollId: ID!, optionId: ID!): Poll!
+  deletePoll(id: ID!): Boolean!
 }
 
 input PollOptionInput {
