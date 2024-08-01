@@ -26,7 +26,6 @@ type Mutation {
 
 input PollOptionInput {
   text: String!
-  votes: Int!
 }
 `
 

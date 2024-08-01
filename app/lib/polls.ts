@@ -1,6 +1,7 @@
 import { CREATE_POLL, DELETE_POLL, VOTE } from "@/app/graphql/mutations";
 import { FETCH_POLL_BY_ID, GET_POLLS } from "@/app/graphql/queries";
 import { getClient } from "./ApolloClient";
+import { title } from "process";
 
 const client = getClient()
 
@@ -31,7 +32,6 @@ export async function fetchPollById(id: number): Promise<Poll> {
     query: FETCH_POLL_BY_ID,
     variables: { id }
   })
-  console.log("🚀 ~ fetchPollById ~ data:", data)
 
   return data.poll
 }
@@ -48,7 +48,11 @@ export async function votePoll(pollId: number, optionId: number): Promise<Poll> 
 export async function createPoll(data: { title: string; description: string; options: string[] }): Promise<Poll> {
   const res: any = await client.mutate({
     mutation: CREATE_POLL,
-    variables: data,
+    variables: {
+      title: data.title,
+      description: data.description,
+      options: data.options.map(option => ({text: option})),
+    },
   });
   return res;
 }

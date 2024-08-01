@@ -7,9 +7,7 @@ export const CREATE_POLL = gql`
       title
       description
       options {
-        id
         text
-        votes
       }
     }
   }

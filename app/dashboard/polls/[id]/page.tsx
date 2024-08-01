@@ -9,7 +9,6 @@ import PollOption from "@/app/components/PollOption";
 export default function PollDetailPage() {
   const [poll, setPoll] = useState<PollType | null>(null);
   const params = useParams()
-  console.log("🚀 ~ PollDetailPage ~ params:", params)
   
   
   useEffect(() => {
@@ -21,7 +20,7 @@ export default function PollDetailPage() {
   }, [])
 
   const handleVote = async (optionId: number) => {
-    await votePoll(parseInt(params!.id as string), parseInt(optionId));
+    await votePoll(parseInt(params!.id as string), optionId);
     const updatedPoll = await fetchPollById(parseInt(params!.id as string));
     setPoll(updatedPoll);
   };
